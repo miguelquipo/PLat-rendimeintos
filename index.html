@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cultiverde - Menu</title>
+  <link rel="stylesheet" href="./CSS/stylesPMenu.css">
+  <link rel="icon" href="./A-IMG/logo_prueba.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Agrega esto en la sección <head> de tus páginas HTML -->
+<script src="./SCRIPTS/fullscreen.js"></script>
+
+</head>
+  <body>
+      <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+    
+      <div class="menu">
+        
+        <div class="bottom-row">
+          <a href="ingProductos1.html" class="menu-item"> <!-- Enlace a paginaproductos.html -->
+            <i class="fas fa-box"></i>
+            <span>Productos</span>
+          </a>
+          <a href="ingPersonal.html" class="menu-item"> <!-- Enlace a paginapersonas.html -->
+              <i class="fas fa-users"></i>
+              <span>Personas</span>
+          </a>
+          <a href="rendimientos.html" class="menu-item"> <!-- Enlace a paginaarchivos.html -->
+            <i class="fas fa-file"></i>
+            <span>Rendimientos</span>
+          </a>
+          <a href="rendimietosFechas.html" class="menu-item"> <!-- Enlace a paginaeditar.html -->
+            <i class="far fa-calendar-alt"></i>
+            <span>Fechas Rendimieto</span>
+          </a>
+          <a href="DesempeñoHora.html" class="menu-item"> <!-- Enlace a visualizacionDesempeño.html -->
+            <i class="fas fa-medal"></i>
+            <span>Desempeño</span>
+          </a>
+          
+          
+         
+        </div>
+
+        <!--
+        <div>
+          <a href="paginaeditar.html" class="menu-item"> 
+            <i class="fas fa-edit"></i>
+            <span>Editar</span>
+          </a>
+        </div> -->
+<script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const menuLink = localStorage.getItem('menuLink');
+            if (menuLink) {
+              const menuItem = document.querySelector('.menu-item[href="rendimientos.html"]');
+              menuItem.href = menuLink;
+            }
+          });
+</script>
+      </div>
+      <footer class="version-tag">
+       <p>Versión 1.02</p>
+      </footer>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+  // Recupera el estado de pantalla completa desde localStorage
+  const isFullscreen = JSON.parse(localStorage.getItem('isFullscreen')) || false;
+
+  // Aplica el estado de pantalla completa al cargar la página
+  if (isFullscreen) {
+    enterFullscreen();
+  }
+});
+
+// Función para cambiar el estado de pantalla completa (puede estar en un archivo compartido)
+function enterFullscreen() {
+  document.documentElement.requestFullscreen();
+}
+
+// Función para salir del modo pantalla completa (puede estar en un archivo compartido)
+function exitFullscreen() {
+  document.exitFullscreen();
+}
+
+      </script>
+      <!--ejecucion segundo plano-->
+<script>
+
+  window.onload = function(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php",true);
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) 
+              console.console.log("El archivo php se ejecuto");
+      }
+      xhr.send();
+  }
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f2f2f2;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	overflow: auto; 
+	}
+	.logo {
+		position: absolute;
+		top: 20px;
+		right: 100px;
+		width: 150px; /* Ajusta el ancho según tu logo */
+		height: auto; /* Para mantener la proporción */
+		}
+	  .logo-fixed {
+	  position: fixed;
+	  top: 10px; /* Ajusta la posición fija según tus necesidades */
+	  right: 10px; /* Ajusta la posición fija según tus necesidades */
+	  transition: top 0.3s ease; /* Agrega una transición suave para el efecto */
+	  }
+  
+  a {
+  text-decoration: none; /* Elimina el subrayado */
+  color: inherit; /* Hereda el color del texto para mantener el estilo original */
+}
+  .menu {
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+	padding: 200px; /* Aumentar el padding para expandir el contenedor */
+	max-width: 900px; /* Establecer un ancho máximo para el contenedor */
+	margin: 0 auto; /* Centrar el contenedor en la pantalla */
+  }
+  
+  .top-row,
+  .bottom-row {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+  }
+  
+  .menu-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border: 2px solid transparent; /* Agregar borde alrededor de los botones */
+  	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+	background-color: #5d7733;
+	background-color: transparent;
+	padding: 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	width: 200px; /* Establecer un ancho fijo */
+ 	height: 200px; 
+	backdrop-filter: blur(2px); /* Aplicar desenfoque a los botones */
+	transition: backdrop-filter 0.3s ease;	
+  }
+  
+  .menu-item i {
+	font-size: 90px; /* Tamaño del ícono */
+	margin-bottom: 10px;
+	filter: none; 
+	color: rgb(0, 0, 0);
+  }
+  
+  .menu-item:hover {
+	background-color: #6b8883;
+	backdrop-filter: blur(0);
+	transform: scale(1.05);
+	box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+
+  }
+  
+  .menu-item:hover span {
+	font-weight: bold;
+  }
+  
+  /* Media Query para dispositivos móviles */
+  @media only screen and (max-width: 1500px) {
+	.top-row,
+	.bottom-row {
+	  flex-direction: column;
+	  align-items: center;
+
+	}
+	.menu-item {
+		width: 200px; /* Establecer un ancho fijo */
+ 	height: 200px; 
+	}
+	.logo{
+		display: none;
+	}
+  }
+
+  .version-tag {
+	position:absolute;
+	bottom: 20px;
+	right: 20px;
+	color: #303625;
+	font-size: 20px;
+  }

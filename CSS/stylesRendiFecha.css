@@ -1,0 +1,141 @@
+/* CSS */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+  height: 100%;
+  overflow: auto; 
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  right: 100px;
+  width: 150px; /* Ajusta el ancho según tu logo */
+  height: auto; /* Para mantener la proporción */
+}
+
+.logo-fixed {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  transition: top 0.3s ease;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.container {
+  margin-top: 10vh; /* Ajusta el espacio desde la parte superior */
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el contenedor de la tabla */
+.table-container {
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 5vh; /* Ajusta el espacio desde la parte superior */
+  padding: 20px; /* Agregar espacio interno al contenedor */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para la tabla de rendimientos */
+#rendimientos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#rendimientos-table th,
+#rendimientos-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+#rendimientos-table th {
+  background-color: #f2f2f2;
+}
+
+#rendimientos-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/*Return Buttom*/
+.return-container {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+}
+
+.return-button {
+  display:block;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255); /* Color de fondo semi-transparente */
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; /* Eliminar subrayado */
+  color: rgb(51, 56, 210); 
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.return-button i {
+  font-size: 30px; /* Reducir tamaño del icono */
+  margin-bottom: 10px;
+}
+
+.return-button:hover {
+  background-color: rgba(107, 136, 131, 0.7); /* Color de fondo semi-transparente al hacer hover */
+  transform: scale(1.05); /* Aumentar tamaño al hacer hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.return-button:hover span {
+  backdrop-filter: none;
+  filter: none;
+}
+
+a {
+  text-decoration: none; /* Elimina el subrayado */
+  color: inherit; /* Hereda el color del texto para mantener el estilo original */
+}
+
+#exportar-btn {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: rgba(54, 113, 103, 0.7);
+  color: #fff;
+  border: #8f2bd1;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#exportar-btn:hover {
+  background-color: rgba(107, 136, 131, 0.7);
+}
+
+/* Media Query para dispositivos móviles */
+@media only screen and (max-width: 768px) {
+  .logo {
+      display: none;
+  }
+}

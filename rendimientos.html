@@ -1,0 +1,318 @@
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Rendimientos</title>
+    <link rel="stylesheet" href="./CSS/stykesRendi.css">
+    <link rel="icon" href="./A-IMG/logo_prueba.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./CSS/bootstrap-table.min.css">
+    <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Incluye SweetAlert desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  </head>
+  <body>
+    <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+
+    <div class="return-container">
+      <a href="index.html" class="return-button">
+        <i class="fas fa-arrow-left"></i>        
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>Rendimientos</h1>
+      <form id="insert-form" method="post" action="./PHP/rendimientosprueba.php">
+        <div class="form-group">
+          <label for="search-cedula">Número de Cédula:</label>
+          <input type="text" id="search-cedula" name="search-cedula" minlength="10" maxlength="10" autofocus>
+          <span id="cedula-help" style="color: red;"></span>
+        </div>  
+        <div class="form-group">
+          <label for="search-producto">Código Producto:</label>
+          <input type="text" id="search-producto" name="search-producto" maxlength="5">
+          <span id="codigo-producto-help" style="color: red;"></span>
+        </div>
+        <div class="form-group">
+          <label for="insert-cantidad">Cantidad Producto:</label><br>
+          <input type="number" id="insert-cantidad" name="insert-cantidad" value="1">
+        </div>
+        <button type="submit" class="manual-submit" id="manual-submit" style="display: none;">Guardar</button>
+      </form>
+      <div class="switch-container">
+        <label class="switch">
+          <input type="checkbox" id="mode-switch">
+          <span class="slider"></span>
+        </label>
+        <span id="mode-text">Modo Manual</span>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <h2>Tabla de Rendimientos</h2>
+      <table id="rendimientos-table"
+            data-height="600"
+            data-toggle="trabajadores-table"
+            data-toolbar=".toolbar"
+            class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>ID Prod.</th>
+            <th>Cantidad</th>
+            <th>Producto</th>
+            <th>Nombre Trabajador</th>
+            <th>Apellido Trabajador</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- Aquí se llenará la tabla con los datos -->
+        </tbody>
+      </table>
+      <button id="exportar-btn">Exportar a Excel</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="./SCRIPTS/jquery-3.7.1.min.js"></script>
+    <script src="./SCRIPTS/bootstrap.bundle.min.js"></script>
+    <script src="./SCRIPTS/bootstrap-table.min.js"></script>
+    <script src="./SCRIPTS/bootstrap-table.js"></script>
+    <script src="./SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+
+    <script>
+     document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('insert-form');
+  const cedulaInput = document.getElementById('search-cedula');
+  const productoInput = document.getElementById('search-producto');
+  const cantidadInput = document.getElementById('insert-cantidad');
+  const switchCheckbox = document.getElementById("mode-switch");
+  const modeText = document.getElementById("mode-text");
+  const manualSubmitButton = document.getElementById("manual-submit");
+
+  let modoAutomatico = localStorage.getItem('modoAutomatico') === 'true';
+  switchCheckbox.checked = modoAutomatico;
+
+  cedulaInput.addEventListener('input', validarCedula);
+  productoInput.addEventListener('input', validarCodigoProducto);
+
+  cantidadInput.addEventListener('input', () => {
+    cantidadInput.value = cantidadInput.value.replace(/[^0-9]/g, "");
+    if (cantidadInput.value <= 0) {
+      cantidadInput.value = 1;
+    }
+  });
+
+  manualSubmitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (cedulaInput.value.trim() !== '' && productoInput.value.trim() !== '' && cantidadInput.value.trim() !== '') {
+      form.submit();
+    }
+  });
+
+  cedulaInput.focus();
+
+  switchCheckbox.addEventListener('change', function() {
+    form.removeAttribute('data-submitted');
+
+    modoAutomatico = switchCheckbox.checked;
+    if (switchCheckbox.checked) {
+      modeText.innerText = "Modo Automático";
+      manualSubmitButton.style.display = "none";
+    } else {
+      modeText.innerText = "Modo Manual";
+      manualSubmitButton.style.display = "block";
+    }
+
+    localStorage.setItem('modoAutomatico', switchCheckbox.checked);
+  });
+
+  const modoGuardado = localStorage.getItem('modoAutomatico');
+  if (modoGuardado !== null) {
+    switchCheckbox.checked = modoGuardado === 'true';
+    switchCheckbox.dispatchEvent(new Event('change'));
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const successParam = urlParams.get('success');
+
+  if (successParam !== null) {
+    if (successParam === 'true') {
+      Swal.fire({
+        title: 'Inserción Exitosa',
+        text: 'Los datos se han insertado correctamente.',
+        icon: 'success',
+        showConfirmButton: false,
+      });
+
+      setTimeout(() => {
+        Swal.close();
+        window.location.href = 'rendimientos.html';
+      }, 1000);
+    } else {
+      Swal.fire({
+        title: 'Error en la Inserción',
+        text: 'Hubo un problema al insertar los datos.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'rendimientos.html';
+      });
+    }
+  }
+
+  obtenerDatos();
+  const exportarBtn = document.getElementById('exportar-btn');
+  exportarBtn.addEventListener('click', function () {
+    exportarExcel('table-body');
+  });
+
+  window.onload = function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200)
+        console.log("El archivo PHP se ejecutó en segundo plano");
+    }
+    xhr.send();
+  }
+});
+
+function validarCedula() {
+  return new Promise((resolve, reject) => {
+    const cedulaInput = document.getElementById('search-cedula');
+    const cedulaHelp = document.getElementById('cedula-help');
+    const cedulaValue = cedulaInput.value;
+
+    if (cedulaValue.length === 10) {
+      $.ajax({
+        url: './PHP/NoConsultas/verificar_cedula.php',
+        method: 'POST',
+        data: { cedula: cedulaValue },
+        success: function(response) {
+          if (response.trim() === 'existe') {
+            cedulaHelp.textContent = '';
+            if (document.getElementById("mode-switch").checked) {
+              document.getElementById("search-producto").focus();
+            }
+            resolve(true);
+          } else {
+            cedulaHelp.textContent = 'No encontrado, Ingresa Uno diferente o crea un registro este número.';
+            cedulaHelp.style.color = 'red';
+            resolve(false);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error en la solicitud AJAX (cedula):', status, error);
+          resolve(false);
+        }
+      });
+    } else {
+      cedulaHelp.textContent = '';
+      resolve(false);
+    }
+  });
+}
+
+function validarCodigoProducto() {
+  return new Promise((resolve, reject) => {
+    const codigoProductoInput = document.getElementById('search-producto');
+    const codigoProductoHelp = document.getElementById('codigo-producto-help');
+    const codigoProductoValue = codigoProductoInput.value;
+
+    if (codigoProductoValue.length === 5) {
+      $.ajax({
+        url: './PHP/NoConsultas/verificar_codigo_producto.php',
+        method: 'POST',
+        data: { codigoProducto: codigoProductoValue },
+        success: function(response) {
+          if (response.trim() === 'existe') {
+            codigoProductoHelp.textContent = '';
+            if (document.getElementById("mode-switch").checked) {
+              submitFormManually(); // Enviar el formulario automáticamente
+            }
+            resolve(true);
+          } else {
+            codigoProductoHelp.textContent = 'No encontrado, ingresa otro o registra uno nuevo.';
+            resolve(false);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error en la solicitud AJAX (producto):', status, error);
+          resolve(false);
+        }
+      });
+    } else {
+      codigoProductoHelp.textContent = '';
+      resolve(false);
+    }
+  });
+}
+
+function submitFormManually() {
+  document.getElementById('insert-form').submit();
+}
+
+function obtenerDatos() {
+  fetch('./PHP/obtener_rendimientos.php')
+    .then(response => response.json())
+    .then(data => {
+      mostrarDatosEnTabla(data);
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos:', error);
+    });
+}
+
+function mostrarDatosEnTabla(data) {
+  const tableBody = document.getElementById('table-body');
+  tableBody.innerHTML = '';
+
+  data.forEach(rendimiento => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${rendimiento.id_rendimiento}</td>
+      <td>${rendimiento.cantidad_vendida}</td>
+      <td>${rendimiento.nombre_producto}</td>
+      <td>${rendimiento.nombre_trabajador}</td>
+      <td>${rendimiento.apellido_trabajador}</td>
+      <td>${rendimiento.fecha_registro}</td>
+      <td>${rendimiento.hora_registro}</td>
+    `;
+    
+    // Asignar color de fondo si está presente en los datos (asumiendo rendimiento.color_code existe)
+    if (rendimiento.color_code) {
+      row.style.backgroundColor = rendimiento.color_code;
+    }
+
+    tableBody.appendChild(row);
+  });
+}
+
+function exportarExcel() {
+  const ws = XLSX.utils.table_to_sheet(document.getElementById('rendimientos-table'));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Rendimientos');
+  XLSX.writeFile(wb, 'RendimientosHora.xlsx');
+}
+
+
+      window.onload = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php", true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200)
+            console.log("El archivo PHP se ejecutó en segundo plano");
+        }
+        xhr.send();
+      }
+    </script>
+  </body>
+  </html>

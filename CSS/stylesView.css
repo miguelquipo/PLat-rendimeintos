@@ -103,7 +103,7 @@ body {
 }
 
 .bueno {
-  border-color: #ffcc00; /* Amarillo más claro */
+  border-color: rgb(51, 56, 210); /* Amarillo más claro */
 }
 
 .observacion {
@@ -112,7 +112,7 @@ body {
 
 
 
-@media screen and (max-width: 60%) {
+@media screen and (max-width: 50%) {
   .level-container {
     flex: 100%; /* En pantallas pequeñas, ocupar todo el ancho disponible */
    
@@ -135,10 +135,10 @@ body {
 .clock {
   display:block;
   position: absolute;
-  top: 12%; /* Centrado verticalmente en la mitad de la pantalla */
+  top: 125px; /* Centrado verticalmente en la mitad de la pantalla */
   left: 20%;
   transform: translate(-50%, -150%);
-  font-size: 36px; /* Tamaño de la fuente más grande */
+  font-size: 45px; /* Tamaño de la fuente más grande */
   font-weight: bold;
   color: #333;
   cursor: pointer; /* Agregado un cursor de puntero al reloj */
@@ -181,13 +181,13 @@ body {
   left: 60%;
   padding: 10px;
   text-align: center;
-  font-size: 2cap;
+  font-size: 3cap;
   z-index: 1000; /* Asegura que el div esté por encima de otros elementos */
   opacity: 0.7;
   font-weight: bold; /* Añade grosor al texto */
 }
 /* Cambios para dispositivos móviles */
-@media only screen and (max-width: 1800px) {
+@media only screen and (max-width: 900px) {
   .clock {
     position: absolute;
     top: 10px; /* Ajusta la distancia desde la parte superior para el reloj */
@@ -478,8 +478,8 @@ th {
   }
 }
 .user {
-  width: 50px; /* Ajusta el tamaño según tus preferencias */
-  height: 50px;
+  width: 70px; /* Ajusta el tamaño según tus preferencias */
+  height: 70px;
   border-radius: 50%; /* Bordes redondos para crear una apariencia circular */
   object-fit: cover; /* Ajusta el tamaño manteniendo la proporción y recortando si es necesario */
   border: 2px solid #fff; /* Agrega un borde blanco alrededor de la imagen */

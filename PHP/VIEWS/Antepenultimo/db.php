@@ -2,7 +2,7 @@
    // Conexión a SQL Server
 $serverName = "localhost\\SQLEXPRESS";
 $uid = "sa";
-$pwd = "cultiverde24plat";
+$pwd = "faber33";
 $databaseName = "dbrendimientos";
 $connectionInfo = array(
     "UID" => $uid,

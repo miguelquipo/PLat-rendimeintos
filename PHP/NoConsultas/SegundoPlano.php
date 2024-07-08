@@ -1,6 +1,6 @@
 <?php
 // Realiza la conexión a la base de datos (cambia estos valores por los tuyos)
-include 'db.php';
+include '../db.php';
 
 // Define el intervalo de tiempo entre ejecuciones (en segundos)
 $intervaloEjecucion = 5; // 5 segundos (ajústalo según tus necesidades)

@@ -1,6 +1,6 @@
 <?php
 // Incluir el archivo de conexión a la base de datos
-include 'db.php';
+include '../db.php';
 
 // Verifica si se recibieron datos en la solicitud POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

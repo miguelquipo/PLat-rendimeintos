@@ -11,11 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener el código de producto enviado por AJAX
     $codigoProducto = $_POST["codigoProducto"];
 
-    // Prepara la llamada al procedimiento almacenado
-    $sql = "{call sp_CheckProducto(?)}";
+    // Prepara la llamada al nuevo procedimiento almacenado
+    $sql = "{call sp_ValidarCodigoProducto(?)}";
     $params = array($codigoProducto);
 
-    // Ejecuta el procedimiento almacenado
+    // Ejecuta el nuevo procedimiento almacenado
     $stmt = sqlsrv_query($conn, $sql, $params);
 
     // Devolver la respuesta al cliente
@@ -35,4 +35,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Cerrar la conexión
 sqlsrv_close($conn);
-?>

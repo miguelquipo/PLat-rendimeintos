@@ -19,28 +19,27 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <style>
     /* Estilos para el contenedor del formulario y el botón de eliminar */
-.form-container {
-  position: relative;
-}
+    .form-container {
+      position: relative;
+    }
 
-.delete-container {
-  position: absolute;
-  top: 1%;
-  right: 10px;
-}
+    .delete-container {
+      position: absolute;
+      top: 1%;
+      right: 10px;
+    }
 
-.delete-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #dc3545;
-  font-size: 15px;
-}
+    .delete-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #dc3545;
+      font-size: 15px;
+    }
 
-.delete-button:hover {
-  color: #c82333;
-}
-
+    .delete-button:hover {
+      color: #c82333;
+    }
   </style>
 </head>
 <body>
@@ -68,7 +67,7 @@
         </div>
         <div class="form-group">
           <label for="insert-cantidad">Cantidad Producto:</label><br>
-          <input type="number" id="insert-cantidad" name="insert-cantidad" value="1">
+          <input type="number" id="insert-cantidad" name="insert-cantidad" min="1" max="99" value="1">
         </div>
         <button type="submit" class="manual-submit" id="manual-submit" style="display: none;">Guardar</button>
       </form>
@@ -121,219 +120,233 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('insert-form');
-      const cedulaInput = document.getElementById('search-cedula');
-      const productoInput = document.getElementById('search-producto');
-      const cantidadInput = document.getElementById('insert-cantidad');
-      const switchCheckbox = document.getElementById("mode-switch");
-      const modeText = document.getElementById("mode-text");
-      const manualSubmitButton = document.getElementById("manual-submit");
+  const form = document.getElementById('insert-form');
+  const cedulaInput = document.getElementById('search-cedula');
+  const productoInput = document.getElementById('search-producto');
+  const cantidadInput = document.getElementById('insert-cantidad');
+  const switchCheckbox = document.getElementById("mode-switch");
+  const modeText = document.getElementById("mode-text");
+  const manualSubmitButton = document.getElementById("manual-submit");
 
-      let modoAutomatico = localStorage.getItem('modoAutomatico') === 'true';
-      switchCheckbox.checked = modoAutomatico;
+  let modoAutomatico = localStorage.getItem('modoAutomatico') === 'true';
+  switchCheckbox.checked = modoAutomatico;
 
-      cedulaInput.addEventListener('input', validarCedula);
-      productoInput.addEventListener('input', validarCodigoProducto);
+  cedulaInput.addEventListener('input', validarCedula);
+  productoInput.addEventListener('input', validarCodigoProducto);
 
-      cantidadInput.addEventListener('input', () => {
-        cantidadInput.value = cantidadInput.value.replace(/[^0-9]/g, "");
-        if (cantidadInput.value <= 0) {
-          cantidadInput.value = 1;
-        }
-      });
-
-      manualSubmitButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (cedulaInput.value.trim() !== '' && productoInput.value.trim() !== '' && cantidadInput.value.trim() !== '') {
-          form.submit();
-        }
-      });
-
-      cedulaInput.focus();
-
-      switchCheckbox.addEventListener('change', function() {
-        form.removeAttribute('data-submitted');
-
-        modoAutomatico = switchCheckbox.checked;
-        if (switchCheckbox.checked) {
-          modeText.innerText = "Modo Automático";
-          manualSubmitButton.style.display = "none";
-        } else {
-          modeText.innerText = "Modo Manual";
-          manualSubmitButton.style.display = "block";
-        }
-
-        localStorage.setItem('modoAutomatico', switchCheckbox.checked);
-      });
-
-      const modoGuardado = localStorage.getItem('modoAutomatico');
-      if (modoGuardado !== null) {
-        switchCheckbox.checked = modoGuardado === 'true';
-        switchCheckbox.dispatchEvent(new Event('change'));
+  cantidadInput.addEventListener('input', function() {
+    // Validar ingreso manual de cantidad
+    if (!switchCheckbox.checked) {
+      let valor = parseInt(cantidadInput.value.trim());
+      if (isNaN(valor) || valor <= 0) {
+        cantidadInput.value = '';
+      } else {
+        cantidadInput.value = Math.min(valor, 99); // Limitar máximo a 99
       }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const successParam = urlParams.get('success');
-
-      if (successParam !== null) {
-        if (successParam === 'true') {
-          Swal.fire({
-            title: 'Inserción Exitosa',
-            text: 'Los datos se han insertado correctamente.',
-            icon: 'success',
-            showConfirmButton: false,
-          });
-
-          setTimeout(() => {
-            Swal.close();
-            window.location.href = 'rendimientos.html';
-          }, 1000);
-        } else {
-          Swal.fire({
-            title: 'Error en la Inserción',
-            text: 'Hubo un problema al insertar los datos.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            window.location.href = 'rendimientos.html';
-          });
-        }
-      }
-
-      obtenerDatos();
-      const exportarBtn = document.getElementById('exportar-btn');
-      exportarBtn.addEventListener('click', function () {
-        exportarExcel('table-body');
-      });
-
-      window.onload = function() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php", true);
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4 && xhr.status == 200)
-            console.log("El archivo PHP se ejecutó en segundo plano");
-        }
-        xhr.send();
-      }
-    });
-
-    function validarCedula() {
-      return new Promise((resolve, reject) => {
-        const cedulaInput = document.getElementById('search-cedula');
-        const cedulaHelp = document.getElementById('cedula-help');
-        const cedulaValue = cedulaInput.value;
-
-        if (cedulaValue.length === 10) {
-          $.ajax({
-            url: './PHP/NoConsultas/verificar_cedula.php',
-            method: 'POST',
-            data: { cedula: cedulaValue },
-            success: function(response) {
-              if (response.trim() === 'existe') {
-                cedulaHelp.textContent = '';
-                if (document.getElementById("mode-switch").checked) {
-                  document.getElementById("search-producto").focus();
-                }
-                resolve(true);
-              } else {
-                cedulaHelp.textContent = 'No encontrado, Ingresa Uno diferente o crea un registro este número.';
-                cedulaHelp.style.color = 'red';
-                resolve(false);
-              }
-            },
-            error: function(xhr, status, error) {
-              console.error('Error en la solicitud AJAX (cedula):', status, error);
-              resolve(false);
-            }
-          });
-        } else {
-          cedulaHelp.textContent = '';
-          resolve(false);
-        }
-      });
     }
+  });
 
-    function validarCodigoProducto() {
-      return new Promise((resolve, reject) => {
-        const codigoProductoInput = document.getElementById('search-producto');
-        const codigoProductoHelp = document.getElementById('codigo-producto-help');
-        const codigoProductoValue = codigoProductoInput.value;
-
-        if (codigoProductoValue.length === 5) {
-          $.ajax({
-            url: './PHP/NoConsultas/verificar_codigo_producto.php',
-            method: 'POST',
-            data: { codigoProducto: codigoProductoValue },
-            success: function(response) {
-              if (response.trim() === 'existe') {
-                codigoProductoHelp.textContent = '';
-                if (document.getElementById("mode-switch").checked) {
-                  submitFormManually(); // Enviar el formulario automáticamente
-                }
-                resolve(true);
-              } else {
-                codigoProductoHelp.textContent = 'No encontrado, ingresa otro o registra uno nuevo.';
-                resolve(false);
-              }
-            },
-            error: function(xhr, status, error) {
-              console.error('Error en la solicitud AJAX (producto):', status, error);
-              resolve(false);
-            }
-          });
-        } else {
-          codigoProductoHelp.textContent = '';
-          resolve(false);
-        }
-      });
-    }
-
-    function submitFormManually() {
-      document.getElementById('insert-form').submit();
-    }
-
-    function obtenerDatos() {
-      fetch('./PHP/obtener_rendimientos.php')
-        .then(response => response.json())
-        .then(data => {
-          mostrarDatosEnTabla(data);
-        })
-        .catch(error => {
-          console.error('Error al obtener los datos:', error);
+  manualSubmitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (cedulaInput.value.trim() !== '' && productoInput.value.trim() !== '' && cantidadInput.value.trim() !== '') {
+      form.submit();
+    } else {
+      if (cantidadInput.value.trim() === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Campo Vacío',
+          text: 'Por favor, ingresa la cantidad del producto.',
+          confirmButtonText: 'OK'
         });
+      }
     }
+  });
 
-    function mostrarDatosEnTabla(data) {
-      const tableBody = document.getElementById('table-body');
-      tableBody.innerHTML = '';
+  switchCheckbox.addEventListener('change', function() {
+    form.removeAttribute('data-submitted');
+    modoAutomatico = switchCheckbox.checked;
+    if (switchCheckbox.checked) {
+      modeText.innerText = "Modo Automático";
+      cantidadInput.value = 1;
+      cantidadInput.setAttribute('disabled', 'disabled');
+      manualSubmitButton.style.display = "none";
+    } else {
+      modeText.innerText = "Modo Manual";
+      cantidadInput.removeAttribute('disabled');
+      manualSubmitButton.style.display = "block";
+    }
+    localStorage.setItem('modoAutomatico', switchCheckbox.checked);
+  });
 
-      data.forEach(rendimiento => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${rendimiento.id_rendimiento}</td>
-          <td>${rendimiento.cantidad_vendida}</td>
-          <td>${rendimiento.nombre_producto}</td>
-          <td>${rendimiento.nombre_trabajador}</td>
-          <td>${rendimiento.apellido_trabajador}</td>
-          <td>${rendimiento.fecha_registro}</td>
-          <td>${rendimiento.hora_registro}</td>
-        `;
-        
-        // Asignar color de fondo si está presente en los datos (asumiendo rendimiento.color_code existe)
-        if (rendimiento.color_code) {
-          row.style.backgroundColor = rendimiento.color_code;
-        }
+  const modoGuardado = localStorage.getItem('modoAutomatico');
+  if (modoGuardado !== null) {
+    switchCheckbox.checked = modoGuardado === 'true';
+    switchCheckbox.dispatchEvent(new Event('change'));
+  }
 
-        tableBody.appendChild(row);
+  const urlParams = new URLSearchParams(window.location.search);
+  const successParam = urlParams.get('success');
+
+  if (successParam !== null) {
+    if (successParam === 'true') {
+      Swal.fire({
+        title: 'Inserción Exitosa',
+        text: 'Los datos se han insertado correctamente.',
+        icon: 'success',
+        showConfirmButton: false,
+      });
+
+      setTimeout(() => {
+        Swal.close();
+        window.location.href = 'rendimientos.html';
+      }, 1000);
+    } else {
+      Swal.fire({
+        title: 'Error en la Inserción',
+        text: 'Hubo un problema al insertar los datos.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'rendimientos.html';
       });
     }
+  }
 
-    function exportarExcel() {
-      const ws = XLSX.utils.table_to_sheet(document.getElementById('rendimientos-table'));
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Rendimientos');
-      XLSX.writeFile(wb, 'RendimientosHora.xlsx');
+  obtenerDatos();
+  const exportarBtn = document.getElementById('exportar-btn');
+  exportarBtn.addEventListener('click', function () {
+    exportarExcel('table-body');
+  });
+
+  window.onload = function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200)
+        console.log("El archivo PHP se ejecutó en segundo plano");
     }
+    xhr.send();
+  }
+});
+
+function validarCedula() {
+  return new Promise((resolve, reject) => {
+    const cedulaInput = document.getElementById('search-cedula');
+    const cedulaHelp = document.getElementById('cedula-help');
+    const cedulaValue = cedulaInput.value;
+
+    if (cedulaValue.length === 10) {
+      $.ajax({
+        url: './PHP/NoConsultas/verificar_cedula.php',
+        method: 'POST',
+        data: { cedula: cedulaValue },
+        success: function(response) {
+          if (response.trim() === 'existe') {
+            cedulaHelp.textContent = '';
+            if (document.getElementById("mode-switch").checked) {
+              document.getElementById("search-producto").focus();
+            }
+            resolve(true);
+          } else {
+            cedulaHelp.textContent = 'No encontrado, Ingresa Uno diferente o crea un registro este número.';
+            cedulaHelp.style.color = 'red';
+            resolve(false);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error en la solicitud AJAX (cedula):', status, error);
+          resolve(false);
+        }
+      });
+    } else {
+      cedulaHelp.textContent = '';
+      resolve(false);
+    }
+  });
+}
+
+function validarCodigoProducto() {
+  return new Promise((resolve, reject) => {
+    const codigoProductoInput = document.getElementById('search-producto');
+    const codigoProductoHelp = document.getElementById('codigo-producto-help');
+    const codigoProductoValue = codigoProductoInput.value;
+
+    if (codigoProductoValue.length === 5) {
+      $.ajax({
+        url: './PHP/NoConsultas/verificar_codigo_producto.php',
+        method: 'POST',
+        data: { codigoProducto: codigoProductoValue },
+        success: function(response) {
+          if (response.trim() === 'existe') {
+            codigoProductoHelp.textContent = '';
+            if (document.getElementById("mode-switch").checked) {
+              submitFormManually(); // Enviar el formulario automáticamente
+            }
+            resolve(true);
+          } else {
+            codigoProductoHelp.textContent = 'No encontrado, ingresa otro o registra uno nuevo.';
+            resolve(false);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error en la solicitud AJAX (producto):', status, error);
+          resolve(false);
+        }
+      });
+    } else {
+      codigoProductoHelp.textContent = '';
+      resolve(false);
+    }
+  });
+}
+
+function submitFormManually() {
+  document.getElementById('insert-form').submit();
+}
+
+function obtenerDatos() {
+  fetch('./PHP/obtener_rendimientos.php')
+    .then(response => response.json())
+    .then(data => {
+      mostrarDatosEnTabla(data);
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos:', error);
+    });
+}
+
+function mostrarDatosEnTabla(data) {
+  const tableBody = document.getElementById('table-body');
+  tableBody.innerHTML = '';
+
+  data.forEach(rendimiento => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${rendimiento.id_rendimiento}</td>
+      <td>${rendimiento.cantidad_vendida}</td>
+      <td>${rendimiento.nombre_producto}</td>
+      <td>${rendimiento.nombre_trabajador}</td>
+      <td>${rendimiento.apellido_trabajador}</td>
+      <td>${rendimiento.fecha_registro}</td>
+      <td>${rendimiento.hora_registro}</td>
+    `;
+    
+    // Asignar color de fondo si está presente en los datos (asumiendo rendimiento.color_code existe)
+    if (rendimiento.color_code) {
+      row.style.backgroundColor = rendimiento.color_code;
+    }
+
+    tableBody.appendChild(row);
+  });
+}
+
+function exportarExcel() {
+  const ws = XLSX.utils.table_to_sheet(document.getElementById('rendimientos-table'));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Rendimientos');
+  XLSX.writeFile(wb, 'RendimientosHora.xlsx');
+}
+
   </script>
 </body>
 </html>

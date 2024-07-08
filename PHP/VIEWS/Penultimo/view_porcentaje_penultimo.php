@@ -1,6 +1,6 @@
 <?php
 // Incluir el archivo de conexión a la base de datos
-include 'db.php';
+include '../../db.php';
 
 // Verificar la conexión
 if ($conn === false) {

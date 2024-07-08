@@ -1,6 +1,6 @@
 <?php
 // Realiza la conexión a la base de datos (cambia estos valores por los tuyos)
-include 'db.php';
+include '../db.php';
 
 if (isset($_POST['cedula'])) {
     $cedula = $_POST['cedula'];

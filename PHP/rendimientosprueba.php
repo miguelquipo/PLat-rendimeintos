@@ -62,48 +62,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search-cedula']) && is
         $idProducto = $resultProducto['id_producto'];
 
         // Verificar si el trabajador tiene registros en el rango actual
-        $sql = "SELECT COUNT(*) AS num_registros
+        $sql = "SELECT MAX(hora_registro) AS ultima_hora_registro
                 FROM rendimiento
                 WHERE id_trabajador = ? AND hora_registro >= ? AND hora_registro <= ?";
         $params = array($idTrabajador, $ultimaHoraRegistroInicio->format('Y-m-d H:i:s'), $ultimaHoraRegistroFin->format('Y-m-d H:i:s'));
-        $stmtValidarRango = sqlsrv_query($conn, $sql, $params);
-        $resultValidarRango = sqlsrv_fetch_array($stmtValidarRango);
+        $stmtUltimaHoraRegistro = sqlsrv_query($conn, $sql, $params);
+        $resultUltimaHoraRegistro = sqlsrv_fetch_array($stmtUltimaHoraRegistro);
 
-        $numRegistrosEnRango = 0;
-
-        if ($resultValidarRango) {
-            $numRegistrosEnRango = $resultValidarRango['num_registros'];
+        if ($resultUltimaHoraRegistro && $resultUltimaHoraRegistro['ultima_hora_registro'] !== null) {
+            $ultimaHoraRegistro = new DateTime($resultUltimaHoraRegistro['ultima_hora_registro']->format('Y-m-d H:i:s'));
         }
 
-        if ($numRegistrosEnRango > 0) {
-            // Si el trabajador tiene registros en el rango, usar la última hora de registro en el rango como inicio
-            $sql = "SELECT MAX(hora_registro) AS ultima_hora_registro
-                    FROM rendimiento
-                    WHERE id_trabajador = ? AND hora_registro >= ? AND hora_registro <= ?";
-            $params = array($idTrabajador, $ultimaHoraRegistroInicio->format('Y-m-d H:i:s'), $ultimaHoraRegistroFin->format('Y-m-d H:i:s'));
-            $stmtUltimaHoraRegistro = sqlsrv_query($conn, $sql, $params);
-            $resultUltimaHoraRegistro = sqlsrv_fetch_array($stmtUltimaHoraRegistro);
-
-            if ($resultUltimaHoraRegistro) {
-                $ultimaHoraRegistro = new DateTime($resultUltimaHoraRegistro['ultima_hora_registro']->format('Y-m-d H:i:s'));
-            }
-        }
-
-        // Ajustar la primera inserción para reflejar la lógica de acumulación desde la última hora de registro
-        $ultimaHoraRegistroInicio = $ultimaHoraRegistro->add(new DateInterval('PT' . round($promedioIngresoPorHora) . 'M'));
+        // Calcular la próxima hora de registro dentro del rango actual
+        $proximoHoraRegistro = clone $ultimaHoraRegistro;
+        $proximoHoraRegistro->add(new DateInterval('PT' . round($promedioIngresoPorHora) . 'M'));
 
         // Preparar la consulta de inserción
         $sql = "INSERT INTO rendimiento (cantidad_vendida, fecha_registro, id_producto, id_trabajador, hora_registro, id_tipo_ingreso) VALUES (1, ?, ?, ?, ?, 1)";
+        $formattedDateTime = $proximoHoraRegistro->format('Y-m-d H:i:s');
         $stmtInsert = sqlsrv_query($conn, $sql, array($formattedDateTime, $idProducto, $idTrabajador, $formattedDateTime));
 
-        for ($i = 0; $i < $cantidadVeces; $i++) {
+        for ($i = 1; $i < $cantidadVeces; $i++) {
             // Calcular la nueva fecha y hora para la inserción
-            $insertDateTime = clone $ultimaHoraRegistroInicio;
-            $insertDateTime->add(new DateInterval('PT' . round($promedioIngresoPorHora * $i) . 'M'));
-            $formattedDateTime = $insertDateTime->format('Y-m-d H:i:s');
+            $proximoHoraRegistro->add(new DateInterval('PT' . round($promedioIngresoPorHora) . 'M'));
+            $formattedDateTime = $proximoHoraRegistro->format('Y-m-d H:i:s');
 
             // Ejecutar la inserción
-            $sql = "INSERT INTO rendimiento (cantidad_vendida, fecha_registro, id_producto, id_trabajador, hora_registro, id_tipo_ingreso) VALUES (1, ?, ?, ?, ?, 1)";
             $stmtInsert = sqlsrv_query($conn, $sql, array($formattedDateTime, $idProducto, $idTrabajador, $formattedDateTime));
         }
 

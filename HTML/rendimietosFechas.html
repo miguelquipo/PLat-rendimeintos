@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV - Rendimientos</title>
-    <link rel="stylesheet" href="./CSS/stylesRendiFecha.css">
-    <link rel="icon" href="./A-IMG/logo_prueba.png">
+    <link rel="stylesheet" href="../CSS/stylesRendiFecha.css">
+    <link rel="icon" href="../A-IMG/logo_prueba.png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -13,10 +13,10 @@
 </head>
 <body>
 
-    <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+    <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
     
     <div class="return-container">
-      <a href="index.html" class="return-button"> <!-- Enlace a la página anterior -->
+      <a href="../index.html" class="return-button"> <!-- Enlace a la página anterior -->
         <i class="fas fa-arrow-left"></i>        
       </a>
     </div>
@@ -70,7 +70,7 @@
       });
       
       function obtenerDatos() {
-        fetch('./PHP/obtener_rendimientos.php')
+        fetch('../PHP/obtener_rendimientos.php')
           .then(response => response.json())
           .then(data => {
             mostrarDatosEnTabla(data);
@@ -121,7 +121,7 @@
     const endDate = document.getElementById('end-date').value;
 
     // Envía las fechas al archivo PHP para filtrar los datos
-    fetch(`./PHP/filtro_fechaRendi.php?start_date=${startDate}&end_date=${endDate}`)
+    fetch(`../PHP/filtro_fechaRendi.php?start_date=${startDate}&end_date=${endDate}`)
       .then(response => response.json())
       .then(data => {
         mostrarDatosEnTabla(data);

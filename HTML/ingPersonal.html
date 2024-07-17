@@ -4,22 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV - Ingreso de Personal</title>
-  <link rel="icon" href="./A-IMG/logo_prueba.png">
-  <link rel="stylesheet" href="./CSS/stylesIngTrab.css">
+  <link rel="icon" href="../A-IMG/logo_prueba.png">
+  <link rel="stylesheet" href="../CSS/stylesIngTrab.css">
   <!-- Incluye Font Awesome -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap-table.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap-table.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap.min.css">
 </head>
 <body>
 
-  <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+  <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
     
 
     <div class="return-container">
-      <a href="index.html" class="return-button"> <!-- Enlace a la página anterior -->
+      <a href="../index.html" class="return-button"> <!-- Enlace a la página anterior -->
         <i class="fas fa-arrow-left"></i>
         
       </a>
@@ -29,7 +29,7 @@
   <main>
     <div class="container">
       <h1>Cultiverde Personal</h1>
-      <form id="personal-form" action="./PHP/insercionTrab.php" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
+      <form id="personal-form" action="../PHP/insercionTrab.php" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
         <div class="form-group">
           <label for="nombre">Nombre:</label><br>
           <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
@@ -81,11 +81,11 @@
   </div>
   </div>
 
-  <script src="./SCRIPTS/jquery-3.7.1.min.js"></script>
-  <script src="./SCRIPTS/bootstrap.bundle.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.js"></script>
-  <script src="./SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+  <script src="../SCRIPTS/jquery-3.7.1.min.js"></script>
+  <script src="../SCRIPTS/bootstrap.bundle.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.js"></script>
+  <script src="../SCRIPTS/bootstrap-table-es-MX.min.js"></script>
   <script>
   function validarFormulario() {
     var cedulaInput = document.getElementById('cedula');
@@ -115,7 +115,7 @@
 });
 
 function obtenerDatosPersonal() {
-    let url = './PHP/obtener_personal.php';
+    let url = '../PHP/obtener_personal.php';
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -158,7 +158,7 @@ function mostrarDatosPersonalEnTabla(data) {
 
     function cambiarEstadoVisibilidad(id_trabajador) {
       // Realiza una solicitud POST al servidor para cambiar el estado de visibilidad del trabajador
-      fetch('./PHP/NoConsultas/actualizar_estado_visibilidad.php', {
+      fetch('../PHP/NoConsultas/actualizar_estado_visibilidad.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

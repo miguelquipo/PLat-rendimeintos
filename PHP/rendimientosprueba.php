@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search-cedula']) && is
         $idTrabajador = $resultTrabajador['id_trabajador'];
     } else {
         // Manejar el caso en que el trabajador no exista en la base de datos
-        header("Location: ../rendimientos.html?success=false&error=no_trabajador");
+        header("Location: ../HTML/rendimientos.html?success=false&error=no_trabajador");
         exit();
     }
 
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search-cedula']) && is
 
     // Si no hay registros de inicio y fin, redirigir con un mensaje de error
     if ($ultimaHoraRegistroInicio === null && $ultimaHoraRegistroFin === null) {
-        header("Location: ../rendimientos.html?success=false&error=no_registro");
+        header("Location: ../HTML/rendimientos.html?success=false&error=no_registro");
         exit();
     }
 
@@ -107,13 +107,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search-cedula']) && is
             $stmtInsert = sqlsrv_query($conn, $sql, array($formattedDateTime, $idProducto, $idTrabajador, $formattedDateTime));
         }
 
-        header("Location: ../rendimientos.html?success=true");
+        header("Location: ../HTML/rendimientos.html?success=true");
         // Redirige a rendimientos.html si la inserción es exitosa
         exit();
 
     } else {
         // Manejar el caso en que el producto no exista en la base de datos
-        header("Location: ../rendimientos.html?success=false&error=no_producto");
+        header("Location: ../HTML/rendimientos.html?success=false&error=no_producto");
         exit();
     }
 }

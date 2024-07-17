@@ -4,29 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV - Ingreso Productos</title>
-  <link rel="stylesheet" href="./CSS/stylesInsertPrd.css">
-  <link rel="icon" href="./A-IMG/logo_prueba.png">
+  <link rel="stylesheet" href="../CSS/stylesInsertPrd.css">
+  <link rel="icon" href="../A-IMG/logo_prueba.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap-table.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap-table.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap.min.css">
 </head>
 <body>
-  <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+  <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
     
   <div class="menu">
     <!-- Resto de los botones aquí -->
   </div>
   <div class="return-container">
-    <a href="index.html" class="return-button"> <!-- Enlace a la página anterior -->
+    <a href="../index.html" class="return-button"> <!-- Enlace a la página anterior -->
       <i class="fas fa-arrow-left"></i>
     </a>
   </div>
 
   <div class="container">
     <h1>Ingreso Productos</h1>
-    <form id="crud-form" method="post" action="./PHP/ingresoProd.php">
+    <form id="crud-form" method="post" action="../PHP/ingresoProd.php">
       <div class="form-group">
         <label for="product-name">Nombre del Producto</label>
         <input type="text" id="product-name" name="product-name" placeholder="" required>
@@ -62,11 +62,11 @@
     <button id="exportar-btn">Exportar a Excel</button>
   </div>
 
- <script src="./SCRIPTS/jquery-3.7.1.min.js"></script>
-  <script src="./SCRIPTS/bootstrap.bundle.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.js"></script>
-  <script src="./SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+ <script src="../SCRIPTS/jquery-3.7.1.min.js"></script>
+  <script src="../SCRIPTS/bootstrap.bundle.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.js"></script>
+  <script src="../SCRIPTS/bootstrap-table-es-MX.min.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     obtenerDatos();
@@ -78,7 +78,7 @@
 });
 
 function obtenerDatos() {
-    fetch('./PHP/obtener_productos.php')
+    fetch('../PHP/obtener_productos.php')
         .then(response => response.json())
         .then(data => {
             mostrarDatosEnTabla(data);

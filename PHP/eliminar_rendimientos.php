@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numero-cedula']) && is
         exit();
     } else {
         // Redirigir con éxito
-        header("Location: ../rendimientos.html?success=true");
+        header("Location: ../HTML/rendimientos.html?success=true");
         exit();
     }
 }

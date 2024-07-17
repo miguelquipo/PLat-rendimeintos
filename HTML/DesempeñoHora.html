@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV - Rendimientos</title>
-  <link rel="stylesheet" href="./CSS/stylesView.css">
-  <link rel="icon" href="./A-IMG/logo_prueba.png">
+  <link rel="stylesheet" href="../CSS/stylesView.css">
+  <link rel="icon" href="../A-IMG/logo_prueba.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <link rel="stylesheet" href="./CSS/bootstrap.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap-table.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap-table.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -31,10 +31,10 @@
 
   <div id="infoDiv"></div>
 
-  <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+  <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
 
   <div class="return-container">
-    <a href="index.html" class="return-button">
+    <a href="../index.html" class="return-button">
       <i class="fas fa-arrow-left"></i>
     </a>
   </div>
@@ -165,7 +165,7 @@
 
     async function obtenerDatosDesempeno() {
       try {
-        let url = './PHP/view_desempeno_hora.php';
+        let url = '../PHP/view_desempeno_hora.php';
         const response = await fetch(url);
         const data = await response.json();
         mostrarDatosDesempeno(data);
@@ -186,7 +186,7 @@
       data.forEach(trabajador => {
         const row = document.createElement('tr');
         row.innerHTML = `
-       <td><img src="${trabajador.imgen ? `./A-IMG/imgUsers/${trabajador.imgen}` : './A-IMG/user.png'}" class="user"></td>
+       <td><img src="${trabajador.imgen ? `../A-IMG/imgUsers/${trabajador.imgen}` : '../A-IMG/user.png'}" class="user"></td>
         <td style="font-size:25px;font-weight: bold;">${trabajador.nombre_apellido_alias}</td>
         <td style="font-size:25px;">${trabajador.producto_nombre}</td>
         <td><div style="font-weight: bold;color: White;background-color: #05a602; font-size:35px; border-radius: 10px;">${trabajador.porcentaje_ingresos_por_hora}%</div></td>
@@ -209,7 +209,7 @@
 
     async function obtenerDatosBueno() {
       try {
-        let url = './PHP/view_bueno_hora.php';
+        let url = '../PHP/view_bueno_hora.php';
         const response = await fetch(url);
         const data = await response.json();
         mostrarDatosBueno(data);
@@ -230,7 +230,7 @@
       data.forEach(trabajador => {
         const row = document.createElement('tr');
         row.innerHTML = `
-        <td><img src="${trabajador.imgen ? `./A-IMG/imgUsers/${trabajador.imgen}` : './A-IMG/user.png'}" class="user"></td>
+        <td><img src="${trabajador.imgen ? `../A-IMG/imgUsers/${trabajador.imgen}` : '../A-IMG/user.png'}" class="user"></td>
         <td style="font-size:25px;font-weight: bold;">${trabajador.nombre_apellido_alias}</td>
         <td style="font-size:25px;">${trabajador.producto_nombre}</td>
         <td><div style="background-color: rgb(51, 56, 210); font-weight: bold;color: White;font-size:35px;border-radius: 10px;">${trabajador.porcentaje_ingresos_por_hora}%</div></td>
@@ -254,7 +254,7 @@
 
     async function obtenerDatosObservacion() {
       try {
-        let url = './PHP/view_observacion_hora.php';
+        let url = '../PHP/view_observacion_hora.php';
         const response = await fetch(url);
         const data = await response.json();
         mostrarDatosObservacion(data);
@@ -275,7 +275,7 @@
       data.forEach(trabajador => {
         const row = document.createElement('tr');
         row.innerHTML = `
-        <td><img src="${trabajador.imgen ? `./A-IMG/imgUsers/${trabajador.imgen}` : './A-IMG/user.png'}" class="user"></td>
+        <td><img src="${trabajador.imgen ? `../A-IMG/imgUsers/${trabajador.imgen}` : '../A-IMG/user.png'}" class="user"></td>
         <td style="font-size:25px;font-weight: bold;">${trabajador.nombre_apellido_alias}</td>
         <td style="font-size:25px;">${trabajador.producto_nombre}</td>
         <td><div style="background-color: #ff2600;font-weight: bold;font-size:35px; color: White;border-radius: 10px;">${trabajador.porcentaje_ingresos_por_hora}%</div></td>
@@ -376,7 +376,7 @@
     title: 'Actividades finalizadas',
     html: `
       <video width="320" height="240" class="video-with-animation" autoplay loop>
-        <source src="./VIDEO/Finalizar.mp4" type="video/mp4">
+        <source src="../VIDEO/Finalizar.mp4" type="video/mp4">
         Tu navegador no soporta el elemento de video.
       </video>
       <p>Cierra la ventana del complemento</p>
@@ -390,7 +390,7 @@
       button.classList.remove('finished');
 
       // Cambiar la dirección del menú en index.html a ./PAGES/WhaitingPage.html
-      localStorage.setItem('menuLink', './PAGES/WhaitingPage.html');
+      localStorage.setItem('menuLink', '../PAGES/WhaitingPage.html');
     }
   });
 } else {
@@ -400,7 +400,7 @@
     title: 'Actividades iniciadas',
     html: `
       <video width="320" height="240" class="video-with-animation" autoplay loop>
-        <source src="./VIDEO/Iniciar.mp4" type="video/mp4">
+        <source src="../VIDEO/Iniciar.mp4" type="video/mp4">
         Tu navegador no soporta el elemento de video.
       </video>
       <p>Ejecuta el complemento y no lo cierre</p>
@@ -427,7 +427,7 @@
       // Realizar la petición AJAX al archivo PHP solo cuando el botón está iniciado
       if (isRunning) {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "./PHP/InsertInicio.php", true);
+        xhr.open("POST", "../PHP/InsertInicio.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         // Envía la información necesaria (puede ser vacía si no se requieren parámetros)
@@ -485,7 +485,7 @@
       // Función para obtener los datos de rango desde el servidor
       async function obtenerDatosRango() {
         try {
-          let url = './PHP/view_rango.php'; // Reemplazar con la ruta correcta al script PHP
+          let url = '../PHP/view_rango.php'; // Reemplazar con la ruta correcta al script PHP
           const response = await fetch(url);
           const data = await response.json();
           mostrarDatosRango(data);
@@ -519,7 +519,7 @@
 
     async function obtenerPorcentajeIngresos() {
       try {
-        let url = './PHP/view_porcentaje_hora.php'; // Reemplaza con la ruta correcta de tu script PHP
+        let url = '../PHP/view_porcentaje_hora.php'; // Reemplaza con la ruta correcta de tu script PHP
         const response = await fetch(url);
         const data = await response.json();
         mostrarPorcentaje(data);
@@ -554,7 +554,7 @@
 
     async function obtenerPorcentajeIngresosAntepenultimo() {
       try {
-        let url = './PHP/VIEWS/Antepenultimo/view_porcentaje_antepenultimo.php'; // Reemplaza con la ruta correcta de tu script PHP
+        let url = '../PHP/VIEWS/Antepenultimo/view_porcentaje_antepenultimo.php'; // Reemplaza con la ruta correcta de tu script PHP
         const response = await fetch(url);
         const data = await response.json();
         mostrarPorcentajeAntepenultimo(data);
@@ -589,7 +589,7 @@
 
     async function obtenerPorcentajeIngresosPenultimo() {
       try {
-        let url = './PHP/VIEWS/Penultimo/view_porcentaje_penultimo.php'; // Reemplaza con la ruta correcta de tu script PHP
+        let url = '../PHP/VIEWS/Penultimo/view_porcentaje_penultimo.php'; // Reemplaza con la ruta correcta de tu script PHP
         const response = await fetch(url);
         const data = await response.json();
         mostrarPorcentajePenultimo(data);
@@ -619,11 +619,11 @@
         var selectedOption = document.getElementById('selectRangoHora').value;
 
         if (selectedOption === 'Penúltimo') {
-          url = './PHP/VIEWS/Penultimo/view_porcentaje_penultimo.php';
+          url = '../PHP/VIEWS/Penultimo/view_porcentaje_penultimo.php';
         } else if (selectedOption === 'Antepenúltimo') {
-          url = './PHP/VIEWS/Antepenultimo/view_porcentaje_antepenultimo.php';
+          url = '../PHP/VIEWS/Antepenultimo/view_porcentaje_antepenultimo.php';
         } else {
-          url = './PHP/view_porcentaje_hora.php';
+          url = '../PHP/view_porcentaje_hora.php';
         }
 
         const response = await fetch(url);
@@ -642,11 +642,11 @@
         var selectedOption = document.getElementById('selectRangoHora').value;
 
         if (selectedOption === 'Penúltimo') {
-          url = './PHP/VIEWS/Penultimo/view_desempeno_penultimo.php';
+          url = '../PHP/VIEWS/Penultimo/view_desempeno_penultimo.php';
         } else if (selectedOption === 'Antepenúltimo') {
-          url = './PHP/VIEWS/Antepenultimo/view_desempeno_antepenultimo.php';
+          url = '../PHP/VIEWS/Antepenultimo/view_desempeno_antepenultimo.php';
         } else {
-          url = './PHP/view_desempeno_hora.php';
+          url = '../PHP/view_desempeno_hora.php';
         }
 
         const response = await fetch(url);
@@ -665,11 +665,11 @@
         var selectedOption = document.getElementById('selectRangoHora').value;
 
         if (selectedOption === 'Penúltimo') {
-          url = './PHP/VIEWS/Penultimo/view_bueno_penultimo.php';
+          url = '../PHP/VIEWS/Penultimo/view_bueno_penultimo.php';
         } else if (selectedOption === 'Antepenúltimo') {
-          url = './PHP/VIEWS/Antepenultimo/view_bueno_antepenultimo.php';
+          url = '../PHP/VIEWS/Antepenultimo/view_bueno_antepenultimo.php';
         } else {
-          url = './PHP/view_bueno_hora.php';
+          url = '../PHP/view_bueno_hora.php';
         }
 
         const response = await fetch(url);
@@ -688,11 +688,11 @@
         var selectedOption = document.getElementById('selectRangoHora').value;
 
         if (selectedOption === 'Penúltimo') {
-          url = './PHP/VIEWS/Penultimo/view_observacion_penultimo.php';
+          url = '../PHP/VIEWS/Penultimo/view_observacion_penultimo.php';
         } else if (selectedOption === 'Antepenúltimo') {
-          url = './PHP/VIEWS/Antepenultimo/view_observacion_antepenultimo.php';
+          url = '../PHP/VIEWS/Antepenultimo/view_observacion_antepenultimo.php';
         } else {
-          url = './PHP/view_observacion_hora.php';
+          url = '../PHP/view_observacion_hora.php';
         }
 
         const response = await fetch(url);
@@ -725,10 +725,10 @@
   </script>
 
 
-  <script src="./SCRIPTS/ScriptView.js"></script>
-  <script src="./SCRIPTS/jquery-3.7.1.min.js"></script>
-  <script src="./SCRIPTS/bootstrap.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+  <script src="../SCRIPTS/ScriptView.js"></script>
+  <script src="../SCRIPTS/jquery-3.7.1.min.js"></script>
+  <script src="../SCRIPTS/bootstrap.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table-es-MX.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

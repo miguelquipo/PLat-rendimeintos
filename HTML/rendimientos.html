@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rendimientos</title>
-  <link rel="stylesheet" href="./CSS/stykesRendi.css">
-  <link rel="icon" href="./A-IMG/logo_prueba.png">
+  <link rel="stylesheet" href="../CSS/stykesRendi.css">
+  <link rel="icon" href="../A-IMG/logo_prueba.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap-table.min.css">
-  <link rel="stylesheet" href="./CSS/bootstrap.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap-table.min.css">
+  <link rel="stylesheet" href="../CSS/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Incluye SweetAlert desde CDN -->
@@ -43,10 +43,10 @@
   </style>
 </head>
 <body>
-  <img src="./A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
+  <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
 
   <div class="return-container">
-    <a href="index.html" class="return-button">
+    <a href="../index.html" class="return-button">
       <i class="fas fa-arrow-left"></i>        
     </a>
   </div>
@@ -54,7 +54,7 @@
   <div class="container">
     <h1>Rendimientos</h1>
     <div class="form-container">
-      <form id="insert-form" method="post" action="./PHP/rendimientosprueba.php">
+      <form id="insert-form" method="post" action="../PHP/rendimientosprueba.php">
         <div class="form-group">
           <label for="search-cedula">Número de Cédula:</label>
           <input type="text" id="search-cedula" name="search-cedula" minlength="10" maxlength="10" autofocus>
@@ -112,11 +112,11 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-  <script src="./SCRIPTS/jquery-3.7.1.min.js"></script>
-  <script src="./SCRIPTS/bootstrap.bundle.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.min.js"></script>
-  <script src="./SCRIPTS/bootstrap-table.js"></script>
-  <script src="./SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+  <script src="../SCRIPTS/jquery-3.7.1.min.js"></script>
+  <script src="../SCRIPTS/bootstrap.bundle.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.min.js"></script>
+  <script src="../SCRIPTS/bootstrap-table.js"></script>
+  <script src="../SCRIPTS/bootstrap-table-es-MX.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -220,7 +220,7 @@
 
   window.onload = function() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "./PHP/NoConsultas/SegundoPlano.php", true);
+    xhr.open("GET", "../PHP/NoConsultas/SegundoPlano.php", true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 && xhr.status == 200)
         console.log("El archivo PHP se ejecutó en segundo plano");
@@ -237,7 +237,7 @@ function validarCedula() {
 
     if (cedulaValue.length === 10) {
       $.ajax({
-        url: './PHP/NoConsultas/verificar_cedula.php',
+        url: '../PHP/NoConsultas/verificar_cedula.php',
         method: 'POST',
         data: { cedula: cedulaValue },
         success: function(response) {
@@ -273,7 +273,7 @@ function validarCodigoProducto() {
 
     if (codigoProductoValue.length === 5) {
       $.ajax({
-        url: './PHP/NoConsultas/verificar_codigo_producto.php',
+        url: '../PHP/NoConsultas/verificar_codigo_producto.php',
         method: 'POST',
         data: { codigoProducto: codigoProductoValue },
         success: function(response) {
@@ -305,7 +305,7 @@ function submitFormManually() {
 }
 
 function obtenerDatos() {
-  fetch('./PHP/obtener_rendimientos.php')
+  fetch('../PHP/obtener_rendimientos.php')
     .then(response => response.json())
     .then(data => {
       mostrarDatosEnTabla(data);

@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV - Ingreso Productos</title>
+  <title>CV - Ingreso y Actualización de Productos</title>
   <link rel="stylesheet" href="../CSS/stylesInsertPrd.css">
   <link rel="icon" href="../A-IMG/logo_prueba.png">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../CSS/bootstrap-table.min.css">
   <link rel="stylesheet" href="../CSS/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
   <img src="../A-IMG/logo_prueba.png" alt="Logo de la empresa" class="logo">
@@ -27,8 +25,9 @@
   </div>
 
   <div class="container">
-    <h1>Ingreso Productos</h1>
+    <h1>Ingreso y Actualización de Productos</h1>
     <form id="crud-form" method="post" action="../PHP/ingresoProd.php">
+      <input type="hidden" id="product-id" name="product-id" value="">
       <div class="form-group">
         <label for="product-name">Nombre del Producto</label>
         <input type="text" id="product-name" name="product-name" placeholder="" required>
@@ -37,7 +36,7 @@
         <label for="product-rendimiento-hora">Rendimiento Hora</label>
         <input type="text" id="product-rendimiento-hora" name="product-rendimiento-hora" placeholder="" required>
       </div>
-      <button type="submit">Agregar Producto</button>
+      <button type="submit">Guardar Producto</button>
     </form>
   </div>
 
@@ -68,6 +67,7 @@
   <script src="../SCRIPTS/bootstrap-table.min.js"></script>
   <script src="../SCRIPTS/bootstrap-table.js"></script>
   <script src="../SCRIPTS/bootstrap-table-es-MX.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       obtenerDatos();
@@ -119,6 +119,7 @@
       const nombre_producto = document.getElementById(`nombre-producto-${id_producto}`).innerText;
       const rendimiento_producto_hora = document.getElementById(`rendimiento-producto-hora-${id_producto}`).innerText;
 
+      document.getElementById('product-id').value = id_producto;
       document.getElementById('product-name').value = nombre_producto;
       document.getElementById('product-rendimiento-hora').value = rendimiento_producto_hora;
 

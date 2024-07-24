@@ -315,163 +315,82 @@
   </script>
   <!-- Boton iniciar-->
   <script>
-    // Recupera el estado del botón y de pantalla completa desde localStorage al cargar la página
-    let isRunning = JSON.parse(localStorage.getItem('isRunning')) || false;
-    let isFullscreen = JSON.parse(localStorage.getItem('isFullscreen')) || false;
-
     document.addEventListener('DOMContentLoaded', function () {
-      const button = document.getElementById('startStopButton');
-
-      // Verifica el estado recuperado y ajusta la lógica del botón
-      if (isRunning) {
-        // Si está iniciado, muestra el estado como FINALIZAR
-        button.textContent = 'FINALIZAR';
-        button.classList.add('finished');
-      } else {
-        // Si está finalizado o el estado no se ha guardado previamente, muestra el estado como INICIAR
-        button.textContent = 'INICIAR';
-        button.classList.remove('finished');
-      }
-
-      // Aplica el estado de pantalla completa al cargar la página
-      if (isFullscreen) {
-       // enterFullscreen();
-      }
+        // Recupera el estado del botón desde el archivo PHP
+        fetch("../PHP/GetButtonState.php")
+            .then(response => response.json())
+            .then(data => {
+                const isRunning = data;
+                const button = document.getElementById('startStopButton');
+    
+                // Ajusta la apariencia del botón según el estado recuperado
+                if (isRunning) {
+                    button.textContent = 'FINALIZAR';
+                    button.classList.add('finished');
+                } else {
+                    button.textContent = 'INICIAR';
+                    button.classList.remove('finished');
+                }
+            })
+            .catch(error => console.error('Error al recuperar el estado del botón:', error));
     });
-
-    // Función para cambiar el estado de pantalla completa
-    function toggleFullscreen() {
-      if (isRunning) {
-        // Si está iniciado, entra en modo pantalla completa
-        //enterFullscreen();
-      } else {
-        // Si está finalizado, sale del modo pantalla completa
-        //exitFullscreen();
-      }
-    }
-
-    // Función para cambiar el estado de pantalla completa
-    function enterFullscreen() {
-      document.documentElement.requestFullscreen();
-      // Guarda el estado de pantalla completa en localStorage
-      isFullscreen = true;
-      localStorage.setItem('isFullscreen', JSON.stringify(isFullscreen));
-    }
-
-    // Función para salir del modo pantalla completa
-    function exitFullscreen() {
-      document.exitFullscreen();
-      // Guarda el estado de pantalla completa en localStorage
-      isFullscreen = false;
-      localStorage.setItem('isFullscreen', JSON.stringify(isFullscreen));
-    }
-
+    
     function toggleStartStop() {
-      const button = document.getElementById('startStopButton');
-
-      if (isRunning) {
-  // Lógica para FINALIZAR
-  Swal.fire({
-    icon: 'success',
-    title: 'Actividades finalizadas',
-    html: `
-      <video width="320" height="240" class="video-with-animation" autoplay loop>
-        <source src="../VIDEO/Finalizar.mp4" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-      </video>
-      <p>Cierra la ventana del complemento</p>
-    `, // Agrega tu video aquí
-    confirmButtonColor: '#3085d6' ,
-    showConfirmButton: true, // Muestra el botón de confirmación
-    confirmButtonText: 'Aceptar', // Texto del botón de confirmación
-    willClose: () => {
-      // Después de cerrar la alerta, realiza otras acciones si es necesario
-      button.textContent = 'INICIAR';
-      button.classList.remove('finished');
-
-      // Cambiar la dirección del menú en index.html a ./PAGES/WhaitingPage.html
-      localStorage.setItem('menuLink', '../PAGES/WhaitingPage.html');
+        const button = document.getElementById('startStopButton');
+    
+        // Determina el nuevo estado del botón
+        const isRunning = button.textContent === 'INICIAR';
+    
+        // Muestra la alerta apropiada y realiza el cambio de estado
+        Swal.fire({
+            icon: 'success',
+            title: isRunning ? 'Actividades iniciadas' : 'Actividades finalizadas',
+            html: `
+                <video width="320" height="240" class="video-with-animation" autoplay loop>
+                    <source src="../VIDEO/${isRunning ? 'Iniciar.mp4' : 'Finalizar.mp4'}" type="video/mp4">
+                    Tu navegador no soporta el elemento de video.
+                </video>
+                <p>${isRunning ? 'Ejecuta el complemento y no lo cierre' : 'Cierra la ventana del complemento'}</p>
+            `,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        }).then(() => {
+            // Envía la solicitud AJAX para actualizar el estado del botón
+            fetch("../PHP/InsertBotonActividades.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `accion=${isRunning ? 'INICIO' : 'FIN'}`
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el estado del botón');
+                }
+                return response.text();
+            }).then(() => {
+                // Envía la solicitud AJAX para insertar en la tabla rendimiento
+                return fetch("../PHP/InsertInicio.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `isRunning=${isRunning}`
+                });
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al insertar en la tabla rendimiento');
+                }
+                return response.text();
+            }).then(() => {
+                // Actualiza la interfaz del botón
+                button.textContent = isRunning ? 'FINALIZAR' : 'INICIAR';
+                button.classList.toggle('finished', isRunning);
+            }).catch(error => console.error('Error:', error));
+        });
     }
-  });
-} else {
-  // Lógica para INICIAR
-  Swal.fire({
-    icon: 'success',
-    title: 'Actividades iniciadas',
-    html: `
-      <video width="320" height="240" class="video-with-animation" autoplay loop>
-        <source src="../VIDEO/Iniciar.mp4" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-      </video>
-      <p>Ejecuta el complemento y no lo cierre</p>
-    `, // Agrega tu video aquí
-    confirmButtonColor: '#3085d6' ,
-    showConfirmButton: true, // Muestra el botón de confirmación
-    confirmButtonText: 'Aceptar', // Texto del botón de confirmación
-    willClose: () => {
-      // Después de cerrar la alerta, realiza otras acciones si es necesario
-      button.textContent = 'FINALIZAR';
-      button.classList.add('finished');
+    </script>
+    
 
-      // Restaurar la dirección del menú en index.html a rendimientos.html
-      localStorage.setItem('menuLink', 'rendimientos.html');
-    }
-  });
-}
-
-
-
-      // Cambiar el estado de ejecución
-      isRunning = !isRunning;
-
-      // Realizar la petición AJAX al archivo PHP solo cuando el botón está iniciado
-      if (isRunning) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../PHP/InsertInicio.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Envía la información necesaria (puede ser vacía si no se requieren parámetros)
-        xhr.send("isRunning=true");
-
-        // Maneja la respuesta del servidor (opcional)
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4 && xhr.status == 200) {
-            // La respuesta del servidor (puede realizar alguna acción si es necesario)
-            console.log(xhr.responseText);
-          }
-        };
-
-       
-      } else {
-        // Si está finalizado, desactiva el modo pantalla completa y guarda el estado
-        exitFullscreen();
-        isFullscreen = false;
-        localStorage.setItem('isFullscreen', JSON.stringify(isFullscreen));
-      }
-
-      // Guarda el estado del botón en localStorage
-      localStorage.setItem('isRunning', JSON.stringify(isRunning));
-
-      // Actualizar el texto y la clase del botón
-      button.textContent = isRunning ? 'FINALIZAR' : 'INICIAR';
-      button.classList.toggle('finished', isRunning);
-    }
-
-   
-
-    // Función para salir del modo pantalla completa
-    function exitFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-  </script>
   <!--Obtener rango hora-->
   <script>
     window.onload = function () {
